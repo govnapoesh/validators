@@ -412,7 +412,7 @@
 				
 				if (callback) {
 				
-					callback.apply({}, [this])
+					callback.apply(this, [])
 				
 				}
 				
@@ -492,9 +492,9 @@
 				
 			],
 			
-			callback: function (validator) {
+			callback: function () {
 				
-				console.log("submitting form ", validator.getForm().attr("id"))
+				console.log("submitting form ", this.getForm().attr("id"))
 				
 			}
 			
