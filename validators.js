@@ -312,9 +312,31 @@
 					this.setValidator(arguments[validator])
 					
 				}
+				
+				var callback = "callback"
+				
+				if (callback in arguments) {
+				
+					this.setCallback(arguments[callback])
+				
+				}
 			
 			}
 			
+		}
+		
+		Validator.prototype.setCallback = function (callback) {
+		
+			this.callback = callback
+			
+			return this
+		
+		}
+		
+		Validator.prototype.getCallback = function () {
+		
+			return this.callback
+		
 		}
 		
 		Validator.prototype.validate = function () {
@@ -323,40 +345,79 @@
 			var validators = this.getValidators()
 			var form = this.getForm()
 			
+			form.find(".field").removeClass("error")
+			
 			var validators_length = validators.length
 			
-			for (var validator_iterator = 0; validator_iterator < validators_length; validator_iterator++) {
+			var continue_iterating = true
+			
+			for (var validator_iterator = 0; validator_iterator < validators_length && continue_iterating; validator_iterator++) {
 			
 				var validator = validators[validator_iterator]
-				validator.validate()
+				
+				try {
+				
+					validator.validate()
+					
+				} catch (exception) {
+				
+					var element = validator.getElement()
+					
+					var parent = element.parents(".field")
+					
+					parent.addClass("error")
+					parent.find(".error-txt").html(exception.getError())
+					
+					continue_iterating = false
+				}
 			}
 		
-			$.post(validatorUrl, form.serialize(), function (answer) {
-
-				console.log("%o", validators)
+			//$.post(validatorUrl, form.serialize(), function (answer) {
 			
+			if (continue_iterating) {
+			
+			var answer = {errors: {text: ['Required Field']}, valid: true}
+
 				for (var validator_iterator = 0; validator_iterator < validators_length; validator_iterator++) {
 				
 					var validator = validators[validator_iterator]
 
-					console.log("%o", validator)
-					
 					var test = validator.testAjaxAnswer(answer)
 					
 					if (test.length) {
 					
-						throw new AjaxValueValidationException(test[0])
+						//throw new AjaxValueValidationException(test[0])
+						
+						var element = validator.getElement()
+						
+						var parent = element.parents(".field")
+						
+						parent.addClass("error")
+						
+						parent.find(".error-txt").html(test[0])
+						
+						continue_iterating = false
 					
 					}
 				
 				}
+
+			}
+			
+			if (continue_iterating) {
+			
+				form.find(".field").removeClass("error")
 				
-			}, function (error) {
-			
-				console.error(error)
-			
-			})
-			
+				var callback = this.getCallback()
+				
+				if (callback) {
+				
+					callback.apply({}, [this])
+				
+				}
+				
+			}
+				
 			return this
 		
 		}
@@ -429,7 +490,13 @@
 					
 				})
 				
-			]
+			],
+			
+			callback: function (validator) {
+				
+				console.log("submitting form ", validator.getForm().attr("id"))
+				
+			}
 			
 		})
 		
@@ -437,12 +504,7 @@
 		
 			try {
 			
-				//validator.validate()
-				$.post("form_validation.json", {}, function (answer) {
-				
-					alert(answer)
-				
-				})
+				validator.validate()
 				
 			} catch (exception) {
 			
