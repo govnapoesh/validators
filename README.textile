@@ -1,14 +1,11 @@
-﻿validators.js
-================
+﻿h1. validators.js
 
-public domain
-govnapoesh@gmail.com
-~~~~~~~~~~~~~~~~
+q. public domain
+address. govnapoesh@gmail.com
 
-Simple django composite client-side and server-side ajax form validators
+p. Simple django composite client-side and server-side ajax form validators
 
-for now supports:
-=================
+h2. for now supports:
 
 * empty value validator
 * regular expresison validator
@@ -17,11 +14,9 @@ for now supports:
 * title validator
 * django ajax-validation json response validator
 
-example usage:
-==============
+h2. example usage:
 
-[code]
-var validator = new Validator({
+bc. var validator = new Validator({
 		
 			form: $("#form"),
 			
@@ -72,4 +67,3 @@ var validator = new Validator({
 			return false
 			
 		})
-[/code]
