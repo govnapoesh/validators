@@ -1,7 +1,18 @@
-﻿Simple django composite client-side and server-side ajax form validators
+﻿validators.js
+================
 
-Now supports:
+public domain
+govnapoesh@gmail.com
+~~~~~~~~~~~~~~~~
+
+Simple django composite client-side and server-side ajax form validators
+
+for now supports:
+=================
 
 * empty value validator
 * regular expresison validator
+* only numbers validator
+* login validator
+* title validator
 * django ajax-validation json response validator

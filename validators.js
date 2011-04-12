@@ -64,13 +64,33 @@
 	
 		RuntimeException.prototype = new Exception()
 		
-		var ValidationException = function () {
+		var ValidationException = function (message, validator) {
 		
 			RuntimeException.apply(this, arguments)
+			
+			if (validator) {
+			
+				this.setValidator(validator)
+			
+			}
 		
 		}
 		
 		ValidationException.prototype = new RuntimeException()
+		
+		ValidationException.prototype.setValidator = function (validator) {
+		
+			this.validator = validator
+			
+			return this
+		
+		}
+		
+		ValidationException.prototype.getValidator = function () {
+		
+			return this.validator
+		
+		}
 		
 		var ValueValidationException = function () {
 		
@@ -169,6 +189,52 @@
 			}
 		
 		}
+	
+		var OnlyLettersValidator = function () {
+		
+			RegularExpressionValidator.apply(this, [{
+			
+					error: "Вводите латиницу или символ _",
+					
+					pattern: /[a-z\_]+/i
+					
+				}]
+				
+			)
+		
+		}
+		
+		OnlyLettersValidator.prototype = new RegularExpressionValidator()
+	
+		var OnlyNumberValidator = function () {
+			
+			RegularExpressionValidator.apply(this, [{
+			
+					error: "Вводите только цифры",
+					
+					pattern: /[0-9]+/
+			
+				}]
+			)
+			
+		}
+		
+		OnlyNumberValidator.prototype = new RegularExpressionValidator()
+		
+		var TitleValidator = function () {
+		
+			RegularExpressionValidator.apply(this, [{
+			
+					error: "Вводите только буквы и пробельные символы",
+					
+					pattern: /[a-z\s]+/
+			
+				}]
+			)
+			
+		}
+		
+		TitleValidator.prototype = new RegularExpressionValidator()
 	
 		var ElementValidator = function (arguments) {
 			
