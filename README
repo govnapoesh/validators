@@ -1,1 +1,7 @@
 ﻿Simple django composite client-side and server-side ajax form validators
+
+Now supports:
+
+* empty value validator
+* regular expresison validator
+* django ajax-validation json response validator
