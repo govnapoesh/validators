@@ -92,16 +92,30 @@
 					
 				}
 				
-				var valueValidators = "valueValidators"
+				var validators = "validators"
 				
-				if (valueValidators in arguments) {
+				if (validators in arguments) {
 				
-					this.setValueValidators(arguments[valueValidators])
+					this.setValidators(arguments[validators])
 				
 				}
 			
 			}
 			
+		}
+		
+		ElementValidator.prototype.setValidators = function (validators) {
+		
+			this.validators = validators
+			
+			return this
+		
+		}
+		
+		ElementValidator.prototype.getValidators = function () {
+			
+			return this.validators
+		
 		}
 		
 		ElementValidator.prototype.setElement = function (element) {
@@ -170,11 +184,11 @@
 				
 				}
 				
-				var elementValidators = "elementValidators"
+				var validators = "validators"
 				
-				if (elementValidators in arguments) {
+				if (validators in arguments) {
 				
-					this.setElementValidators(arguments[elementValidators])
+					this.setValidators(arguments[validators])
 					
 				}
 			
@@ -182,17 +196,17 @@
 			
 		}
 
-		Validator.prototype.setElementValidators = function (elementValidators) {
+		Validator.prototype.setValidators = function (validators) {
 		
-			this.elementValidators = elementValidators
+			this.validators = validators
 			
 			return this
 		
 		}
 		
-		Validator.prototype.getElementValidators = function () {
+		Validator.prototype.getValidators = function () {
 		
-			return this.elementValidators
+			return this.validators
 		
 		}
 		
