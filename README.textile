@@ -17,7 +17,7 @@ h2. for now supports
 
 h2. example usage
 
-@var validator = new Validator({
+<pre>var validator = new Validator({
 
 			form: $("#form"),
  			
@@ -67,4 +67,5 @@ h2. example usage
  			
  			return false
  			
- 		})@
+ 		})
+</pre>
