@@ -179,6 +179,29 @@
 			
 		}
 		
+		ElementValidator.prototype.validate = function () {
+		
+			var validators = this.getValidators()
+			var element = this.getElement()
+			
+			if (validators) {
+			
+				var validators_length = validators.length
+			
+				for (var validator = 0; validator < validators_length; validator++) {
+				
+					var validator = validators[validator]
+					
+					validator.validate(element)
+				
+				}
+			
+			}
+			
+			return this
+		
+		}
+		
 		ElementValidator.prototype.setValidators = function (validators) {
 		
 			this.validators = validators
@@ -298,6 +321,21 @@
 			return this.form
 		
 		}
+		
+		var validator = new Validator({
+			form: $("#form"),
+			validators: [
+				new ElementValidator({
+					element: $("#text"),
+					validators: [
+						new RegularExpressionValueValidator({
+							pattern: /[\d]+/,
+							error: "Вы ввели плохой текст!"
+						})
+					]
+				})
+			]
+		})
 	
 	})
 	
