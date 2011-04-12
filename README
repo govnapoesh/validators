@@ -16,3 +16,60 @@ for now supports:
 * login validator
 * title validator
 * django ajax-validation json response validator
+
+example usage:
+==============
+
+[code]
+var validator = new Validator({
+		
+			form: $("#form"),
+			
+			validators: [
+			
+				new ElementValidator({
+				
+					element: $("#text"),
+					
+					validators: [
+					
+						new RegularExpressionValidator({
+						
+							pattern: /[\d]+/,
+							
+							error: "Вы ввели плохой текст!"
+							
+						})
+						
+					],
+					
+					validator: "form_validation.json"
+					
+				})
+				
+			],
+			
+			callback: function () {
+				
+				console.log("submitting form ", this.getForm().attr("id"))
+				
+			}
+			
+		})
+		
+		$("#button").click(function () {
+		
+			try {
+			
+				validator.validate()
+				
+			} catch (exception) {
+			
+				console.log("%o", exception)
+			
+			}
+			
+			return false
+			
+		})
+[/code]
