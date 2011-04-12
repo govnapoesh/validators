@@ -80,20 +80,35 @@
 		
 		ValueValidationException.prototype = new ValidationException()
 	
+		var AjaxValueValidationException = function () {
+		
+			ValueValidationException.apply(this, arguments)
+		
+		}
+	
+		AjaxValueValidationException.prototype = new ValueValidationException()
+	
 		var ValueLengthValidator = function () {
 			
 			ValueValidator.apply(this, [{"error": "Поле не может быть пустым"}])
 			
 		}
 		
+		
 		ValueLengthValidator.prototype = new ValueValidator()
 	
 		ValueLengthValidator.prototype.validate = function (element) {
-			if (element.val()) {
-				return this
+
+		if (element.val()) {
+
+			return this
+			
 			}
+			
 			else {
+			
 				throw new ValueValidationException(this.getError())
+
 			}
 		}
 		
@@ -254,7 +269,7 @@
 						
 							if (this.getElementId() in answer[errors]) {
 							
-								return answer[errors][this.getElementId()].length
+								return answer[errors][this.getElementId()]
 								
 							}
 						
@@ -289,11 +304,77 @@
 					this.setValidators(arguments[validators])
 					
 				}
+				
+				var validator = "validator"
+				
+				if (validator in arguments) {
+					
+					this.setValidator(arguments[validator])
+					
+				}
 			
 			}
 			
 		}
+		
+		Validator.prototype.validate = function () {
+		
+			var validatorUrl = this.getValidator()
+			var validators = this.getValidators()
+			var form = this.getForm()
+			
+			var validators_length = validators.length
+			
+			for (var validator_iterator = 0; validator_iterator < validators_length; validator_iterator++) {
+			
+				var validator = validators[validator_iterator]
+				validator.validate()
+			}
+		
+			$.post(validatorUrl, form.serialize(), function (answer) {
 
+				console.log("%o", validators)
+			
+				for (var validator_iterator = 0; validator_iterator < validators_length; validator_iterator++) {
+				
+					var validator = validators[validator_iterator]
+
+					console.log("%o", validator)
+					
+					var test = validator.testAjaxAnswer(answer)
+					
+					if (test.length) {
+					
+						throw new AjaxValueValidationException(test[0])
+					
+					}
+				
+				}
+				
+			}, function (error) {
+			
+				console.error(error)
+			
+			})
+			
+			return this
+		
+		}
+		
+		Validator.prototype.setValidator = function (validator) {
+		
+			this.validator = validator
+			
+			return this
+		
+		}
+		
+		Validator.prototype.getValidator = function () {
+		
+			return this.validator
+		
+		}
+		
 		Validator.prototype.setValidators = function (validators) {
 		
 			this.validators = validators
@@ -323,18 +404,49 @@
 		}
 		
 		var validator = new Validator({
+		
 			form: $("#form"),
+			
 			validators: [
+			
 				new ElementValidator({
+				
 					element: $("#text"),
+					
 					validators: [
-						new RegularExpressionValueValidator({
+					
+						new RegularExpressionValidator({
+						
 							pattern: /[\d]+/,
+							
 							error: "Вы ввели плохой текст!"
+							
 						})
-					]
+						
+					],
+					
+					validator: "file:///C:/Documents%20and%20Settings/Admin/%D0%9C%D0%BE%D0%B8%20%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D1%8B/validators/form_validation.json"
+					
 				})
+				
 			]
+			
+		})
+		
+		$("#button").click(function () {
+		
+			try {
+			
+				validator.validate()
+				
+			} catch (exception) {
+			
+				console.log("%o", exception)
+			
+			}
+			
+			return false
+			
 		})
 	
 	})
