@@ -1,1 +1,0 @@
-﻿Simple django composite client-side and server-side ajax form validators
