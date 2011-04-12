@@ -425,7 +425,7 @@
 						
 					],
 					
-					validator: "file:///C:/Documents%20and%20Settings/Admin/%D0%9C%D0%BE%D0%B8%20%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D1%8B/validators/form_validation.json"
+					validator: "form_validation.json"
 					
 				})
 				
@@ -437,7 +437,12 @@
 		
 			try {
 			
-				validator.validate()
+				//validator.validate()
+				$.post("form_validation.json", {}, function (answer) {
+				
+					alert(answer)
+				
+				})
 				
 			} catch (exception) {
 			
