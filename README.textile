@@ -1,9 +1,9 @@
-﻿h1. validators.js
+﻿h2. validators.js
 
-q. public domain
-address. govnapoesh@gmail.com
+_public domain_
+govnapoesh@gmail.com
 
-p. Simple django composite client-side and server-side ajax form validators
+Simple django composite client-side and server-side ajax form validators
 
 h2. for now supports:
 
@@ -17,53 +17,54 @@ h2. for now supports:
 h2. example usage:
 
 bc. var validator = new Validator({
-		
-			form: $("#form"),
-			
-			validators: [
-			
-				new ElementValidator({
-				
-					element: $("#text"),
-					
-					validators: [
-					
-						new RegularExpressionValidator({
-						
-							pattern: /[\d]+/,
-							
-							error: "Вы ввели плохой текст!"
-							
-						})
-						
-					],
-					
-					validator: "form_validation.json"
-					
-				})
-				
-			],
-			
-			callback: function () {
-				
-				console.log("submitting form ", this.getForm().attr("id"))
-				
-			}
-			
-		})
-		
-		$("#button").click(function () {
-		
-			try {
-			
-				validator.validate()
-				
-			} catch (exception) {
-			
-				console.log("%o", exception)
-			
-			}
-			
-			return false
-			
-		})
+bc. 
+bc. 			form: $("#form"),
+bc. 			
+bc. 			validators: [
+bc. 			
+bc. 				new ElementValidator({
+bc. 				
+bc. 					element: $("#text"),
+bc. 					
+bc. 					validators: [
+bc. 					
+bc. 						new RegularExpressionValidator({
+bc. 						
+bc. 							pattern: /[\d]+/,
+bc. 							
+bc. 							error: "Вы ввели плохой текст!"
+bc. 							
+bc. 						})
+bc. 						
+bc. 					],
+bc. 					
+bc. 					validator: "form_validation.json"
+bc. 					
+bc. 				})
+bc. 				
+bc. 			],
+bc. 			
+bc. 			callback: function () {
+bc. 				
+bc. 				console.log("submitting form ", this.getForm().attr("id"))
+bc. 				
+bc. 			}
+bc. 			
+bc. 		})
+bc. 		
+bc. 		$("#button").click(function () {
+bc. 		
+bc. 			try {
+bc. 			
+bc. 				validator.validate()
+bc. 				
+bc. 			} catch (exception) {
+bc. 			
+bc. 				console.log("%o", exception)
+bc. 			
+bc. 			}
+bc. 			
+bc. 			return false
+bc. 			
+bc. 		})
+bc. 
