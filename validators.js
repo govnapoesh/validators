@@ -80,6 +80,81 @@
 		
 		ValueValidationException.prototype = new ValidationException()
 	
+		var ValueLengthValidator = function () {
+			
+			ValueValidator.apply(this, [{"error": "Поле не может быть пустым"}])
+			
+		}
+		
+		ValueLengthValidator.prototype = new ValueValidator()
+	
+		ValueLengthValidator.prototype.validate = function (element) {
+			if (element.val()) {
+				return this
+			}
+			else {
+				throw new ValueValidationException(this.getError())
+			}
+		}
+		
+		var RegularExpressionValidator = function (arguments) {
+			
+			ValueValidator.apply(this, [arguments])
+			
+			if (arguments) {
+			
+				var pattern = "pattern"
+				
+				if (pattern in arguments) {
+				
+					this.setPattern(arguments[pattern])
+				
+				}
+				
+				var error = "error"
+				
+				if (! (error in arguments)) {
+				
+					this.setError("Ожидается ввод в формате " + String(this.getPattern()))
+				
+				}
+			
+			}
+			
+		}
+		
+		RegularExpressionValidator.prototype = new ValueValidator()
+		
+		RegularExpressionValidator.prototype.setPattern = function (pattern) {
+		
+			this.pattern = pattern
+			
+			return this
+		
+		}
+		
+		RegularExpressionValidator.prototype.getPattern = function () {
+		
+			return this.pattern
+		
+		}
+		
+		RegularExpressionValidator.prototype.validate = function (element) {
+		
+			var value = element.val()
+			
+			if (this.getPattern().test(value)) {
+			
+				return this
+			
+			} else {
+			
+				throw new ValueValidationException(this.getError())
+			
+			}
+		
+		}
+	
 		var ElementValidator = function (arguments) {
 			
 			if (arguments) {
