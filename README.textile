@@ -1,5 +1,4 @@
-﻿
-h2. validators js
+﻿h1. validators js
 
 _public domain_
 
@@ -18,8 +17,7 @@ h2. for now supports
 
 h2. example usage
 
-@@
-var validator = new Validator({
+@var validator = new Validator({
 
 			form: $("#form"),
  			
@@ -69,5 +67,4 @@ var validator = new Validator({
  			
  			return false
  			
- 		})
-@@
+ 		})@
