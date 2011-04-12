@@ -5,7 +5,7 @@ govnapoesh@gmail.com
 
 Simple django composite client-side and server-side ajax form validators
 
-h2. for now supports:
+h2. for now supports
 
 * empty value validator
 * regular expresison validator
@@ -14,7 +14,7 @@ h2. for now supports:
 * title validator
 * django ajax-validation json response validator
 
-h2. example usage:
+h2. example usage
 
 bc. var validator = new Validator({
 bc. 
