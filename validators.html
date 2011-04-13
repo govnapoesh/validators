@@ -12,4 +12,61 @@
 		</div>
 		<input type="button" id="button" value="click" />
 	</form>
+	
+	<script type="text/javascript">
+		$(function () {
+		
+			var ns = window.validators
+			var validator = new ns.Validator({
+			
+				form: $("#form"),
+				
+				validators: [
+				
+					new ns.ElementValidator({
+					
+						element: $("#text"),
+						
+						validators: [
+						
+							new ns.OnlyNumberValidator()
+						
+						],
+						
+						validator: "form_validator.json",
+						
+						critical: true
+					
+					})
+				
+				],
+				
+				callback: function () {
+				
+					console.log("submitting form")
+				
+				}
+			
+			})
+			
+			$("#button").click(function () {
+			
+				console.log("here again")
+			
+				try {
+				
+					validator.validateField($("#text"))
+				
+				} catch (exception) {
+				
+					console.log("%o", exception)
+				
+				}
+				
+				return false
+			
+			})
+	
+		})
+	</script>
 </body>

@@ -1,8 +1,10 @@
-﻿(function ($, undefined) {
+﻿(function ($, window__, undefined__) {
 
 	$(function () {
+
+		var validators = {}
 	
-		var ValueValidator = function (arguments) {
+		validators.ValueValidator = function (arguments) {
 		
 			if (arguments) {
 			
@@ -18,7 +20,7 @@
 		
 		}
 	
-		ValueValidator.prototype.setError = function (error) {
+		validators.ValueValidator.prototype.setError = function (error) {
 		
 			this.error = error
 			
@@ -26,13 +28,13 @@
 			
 		}
 		
-		ValueValidator.prototype.getError = function () {
+		validators.ValueValidator.prototype.getError = function () {
 			
 			return this.error
 			
 		}
 	
-		var Exception = function (error) {
+		validators.Exception = function (error) {
 			
 			if (error) {
 			
@@ -42,7 +44,7 @@
 			
 		}
 		
-		Exception.prototype.setError = function (error) {
+		validators.Exception.prototype.setError = function (error) {
 			
 			this.error = error
 			
@@ -50,23 +52,23 @@
 			
 		}
 		
-		Exception.prototype.getError = function () {
+		validators.Exception.prototype.getError = function () {
 		
 			return this.error
 		
 		}
 		
-		var RuntimeException = function () {
+		validators.RuntimeException = function () {
 		
-			Exception.apply(this, arguments)
+			validators.Exception.apply(this, arguments)
 			
 		}
 	
-		RuntimeException.prototype = new Exception()
+		validators.RuntimeException.prototype = new validators.Exception()
 		
-		var ValidationException = function (message, validator) {
+		validators.ValidationException = function (message, validator) {
 		
-			RuntimeException.apply(this, arguments)
+			validators.RuntimeException.apply(this, arguments)
 			
 			if (validator) {
 			
@@ -76,9 +78,9 @@
 		
 		}
 		
-		ValidationException.prototype = new RuntimeException()
+		validators.ValidationException.prototype = new validators.RuntimeException()
 		
-		ValidationException.prototype.setValidator = function (validator) {
+		validators.ValidationException.prototype.setValidator = function (validator) {
 		
 			this.validator = validator
 			
@@ -86,38 +88,38 @@
 		
 		}
 		
-		ValidationException.prototype.getValidator = function () {
+		validators.ValidationException.prototype.getValidator = function () {
 		
 			return this.validator
 		
 		}
 		
-		var ValueValidationException = function () {
+		validators.ValueValidationException = function () {
 		
-			ValidationException.apply(this, arguments)
-		
-		}
-		
-		ValueValidationException.prototype = new ValidationException()
-	
-		var AjaxValueValidationException = function () {
-		
-			ValueValidationException.apply(this, arguments)
+			validators.ValidationException.apply(this, arguments)
 		
 		}
+		
+		validators.ValueValidationException.prototype = new validators.ValidationException()
 	
-		AjaxValueValidationException.prototype = new ValueValidationException()
+		validators.AjaxValueValidationException = function () {
+		
+			validators.ValueValidationException.apply(this, arguments)
+		
+		}
 	
-		var ValueLengthValidator = function () {
+		validators.AjaxValueValidationException.prototype = new validators.ValueValidationException()
+	
+		validators.ValueLengthValidator = function () {
 			
-			ValueValidator.apply(this, [{"error": "Поле не может быть пустым"}])
+			validators.ValueValidator.apply(this, [{"error": "Поле не может быть пустым"}])
 			
 		}
 		
 		
-		ValueLengthValidator.prototype = new ValueValidator()
+		validators.ValueLengthValidator.prototype = new validators.ValueValidator()
 	
-		ValueLengthValidator.prototype.validate = function (element) {
+		validators.ValueLengthValidator.prototype.validate = function (element) {
 
 		if (element.val()) {
 
@@ -127,14 +129,14 @@
 			
 			else {
 			
-				throw new ValueValidationException(this.getError())
+				throw new validators.ValueValidationException(this.getError())
 
 			}
 		}
 		
-		var RegularExpressionValidator = function (arguments) {
+		validators.RegularExpressionValidator = function (arguments) {
 			
-			ValueValidator.apply(this, [arguments])
+			validators.ValueValidator.apply(this, [arguments])
 			
 			if (arguments) {
 			
@@ -158,9 +160,9 @@
 			
 		}
 		
-		RegularExpressionValidator.prototype = new ValueValidator()
+		validators.RegularExpressionValidator.prototype = new validators.ValueValidator()
 		
-		RegularExpressionValidator.prototype.setPattern = function (pattern) {
+		validators.RegularExpressionValidator.prototype.setPattern = function (pattern) {
 		
 			this.pattern = pattern
 			
@@ -168,13 +170,13 @@
 		
 		}
 		
-		RegularExpressionValidator.prototype.getPattern = function () {
+		validators.RegularExpressionValidator.prototype.getPattern = function () {
 		
 			return this.pattern
 		
 		}
 		
-		RegularExpressionValidator.prototype.validate = function (element) {
+		validators.RegularExpressionValidator.prototype.validate = function (element) {
 		
 			var value = element.val()
 			
@@ -184,15 +186,15 @@
 			
 			} else {
 			
-				throw new ValueValidationException(this.getError())
+				throw new validators.ValueValidationException(this.getError())
 			
 			}
 		
 		}
 	
-		var OnlyLettersValidator = function () {
+		validators.OnlyLettersValidator = function () {
 		
-			RegularExpressionValidator.apply(this, [{
+			validators.RegularExpressionValidator.apply(this, [{
 			
 					error: "Вводите латиницу или символ _",
 					
@@ -204,11 +206,11 @@
 		
 		}
 		
-		OnlyLettersValidator.prototype = new RegularExpressionValidator()
+		validators.OnlyLettersValidator.prototype = new validators.RegularExpressionValidator()
 	
-		var OnlyNumberValidator = function () {
+		validators.OnlyNumberValidator = function () {
 			
-			RegularExpressionValidator.apply(this, [{
+			validators.RegularExpressionValidator.apply(this, [{
 			
 					error: "Вводите только цифры",
 					
@@ -219,11 +221,11 @@
 			
 		}
 		
-		OnlyNumberValidator.prototype = new RegularExpressionValidator()
+		validators.OnlyNumberValidator.prototype = new validators.RegularExpressionValidator()
 		
-		var TitleValidator = function () {
+		validators.TitleValidator = function () {
 		
-			RegularExpressionValidator.apply(this, [{
+			validators.RegularExpressionValidator.apply(this, [{
 			
 					error: "Вводите только буквы и пробельные символы",
 					
@@ -234,9 +236,9 @@
 			
 		}
 		
-		TitleValidator.prototype = new RegularExpressionValidator()
+		validators.TitleValidator.prototype = new validators.RegularExpressionValidator()
 	
-		var ElementValidator = function (arguments) {
+		validators.ElementValidator = function (arguments) {
 			
 			if (arguments) {
 			
@@ -255,12 +257,40 @@
 					this.setValidators(arguments[validators])
 				
 				}
+				
+				var critical = "critical"
+				
+				var defaultCritical = false
+				
+				if (critical in arguments) {
+				
+					this.setCritical(arguments[critical])
+				
+				} else {
+				
+					this.setCritical(defaultCritical)
+				
+				}
 			
 			}
 			
 		}
 		
-		ElementValidator.prototype.validate = function () {
+		validators.ElementValidator.prototype.setCritical = function (critical) {
+			
+			this.critical = critical
+			
+			return this
+		
+		}
+		
+		validators.ElementValidator.prototype.getCritical = function () {
+		
+			return this.critical
+		
+		}
+		
+		validators.ElementValidator.prototype.validate = function () {
 		
 			var validators = this.getValidators()
 			var element = this.getElement()
@@ -283,7 +313,7 @@
 		
 		}
 		
-		ElementValidator.prototype.setValidators = function (validators) {
+		validators.ElementValidator.prototype.setValidators = function (validators) {
 		
 			this.validators = validators
 			
@@ -291,13 +321,13 @@
 		
 		}
 		
-		ElementValidator.prototype.getValidators = function () {
+		validators.ElementValidator.prototype.getValidators = function () {
 			
 			return this.validators
 		
 		}
 		
-		ElementValidator.prototype.setElement = function (element) {
+		validators.ElementValidator.prototype.setElement = function (element) {
 		
 			this.element = element
 			
@@ -305,13 +335,13 @@
 		
 		}
 		
-		ElementValidator.prototype.getElement = function () {
+		validators.ElementValidator.prototype.getElement = function () {
 		
 			return this.element
 		
 		}
 		
-		ElementValidator.prototype.getElementId = function () {
+		validators.ElementValidator.prototype.getElementId = function () {
 		
 			var id = "id"
 			
@@ -319,7 +349,7 @@
 			
 		}
 		
-		ElementValidator.prototype.testAjaxAnswer = function (answer) {
+		validators.ElementValidator.prototype.testAjaxAnswer = function (answer) {
 		
 			if (answer) {
 			
@@ -351,7 +381,7 @@
 			
 		}
 		
-		var Validator = function (arguments) {
+		validators.Validator = function (arguments) {
 			
 			if (arguments) {
 				
@@ -391,7 +421,7 @@
 			
 		}
 		
-		Validator.prototype.setCallback = function (callback) {
+		validators.Validator.prototype.setCallback = function (callback) {
 		
 			this.callback = callback
 			
@@ -399,13 +429,13 @@
 		
 		}
 		
-		Validator.prototype.getCallback = function () {
+		validators.Validator.prototype.getCallback = function () {
 		
 			return this.callback
 		
 		}
 		
-		Validator.prototype.validate = function () {
+		validators.Validator.prototype.validate = function () {
 		
 			var validatorUrl = this.getValidator()
 			var validators = this.getValidators()
@@ -488,7 +518,93 @@
 		
 		}
 		
-		Validator.prototype.setValidator = function (validator) {
+		validators.Validator.prototype.validateField = function (element) {
+			var validatorUrl = this.getValidator()
+			var validators = this.getValidators()
+			var form = this.getForm()
+			
+			// form.find(".field").removeClass("error")
+			
+			element.parents(".field").removeClass("error")
+			element.parents(".field").find(".error-txt").html("")
+			
+			var validators_length = validators.length
+			
+			var continue_iterating = true
+			
+			var validator = undefined__
+			
+			for (var validator_iterator = 0; validator_iterator < validators_length && continue_iterating; validator_iterator++) {
+			
+				validator = validators[validator_iterator]
+				
+				var validator_element = validator.getElement()
+				
+				if (validator_element.attr("id") == element.attr("id")) {
+				
+					try {
+				
+						validator.validate()
+						
+						continue_iterating = false
+					
+					} catch (exception) {
+				
+						var element = validator.getElement()
+					
+						var parent = element.parents(".field")
+					
+						parent.addClass("error")
+						parent.find(".error-txt").html(exception.getError())
+					
+						continue_iterating = false
+					}
+					
+				}
+				
+			}
+		
+			if (continue_iterating && validator.getCritical()) {
+			
+			$.post(validatorUrl, form.serialize(), function (answer) {
+			
+				//var answer = {errors: {text: ['Required Field']}, valid: true}
+
+				for (var validator_iterator = 0; validator_iterator < validators_length; validator_iterator++) {
+				
+					validator = validators[validator_iterator]
+					
+					var validator_element = validator.getElement()
+					
+					if (validator_element.attr("id") == element.attr("id")) {
+
+						var test = validator.testAjaxAnswer(answer)
+					
+						if (test.length) {
+					
+						//throw new AjaxValueValidationException(test[0])
+						
+							var element = validator.getElement()
+						
+							var parent = element.parents(".field")
+						
+							parent.addClass("error")
+						
+							parent.find(".error-txt").html(test[0])
+						
+							continue_iterating = false
+						}
+					
+					}
+				
+				}
+
+			})
+		}
+		
+		}
+		
+		validators.Validator.prototype.setValidator = function (validator) {
 		
 			this.validator = validator
 			
@@ -496,13 +612,13 @@
 		
 		}
 		
-		Validator.prototype.getValidator = function () {
+		validators.Validator.prototype.getValidator = function () {
 		
 			return this.validator
 		
 		}
 		
-		Validator.prototype.setValidators = function (validators) {
+		validators.Validator.prototype.setValidators = function (validators) {
 		
 			this.validators = validators
 			
@@ -510,13 +626,13 @@
 		
 		}
 		
-		Validator.prototype.getValidators = function () {
+		validators.Validator.prototype.getValidators = function () {
 		
 			return this.validators
 		
 		}
 		
-		Validator.prototype.setForm = function (form) {
+		validators.Validator.prototype.setForm = function (form) {
 		
 			this.form = form
 			
@@ -524,64 +640,13 @@
 			
 		}
 	
-		Validator.prototype.getForm = function () {
+		validators.Validator.prototype.getForm = function () {
 		
 			return this.form
 		
 		}
 		
-		var validator = new Validator({
+		window.validators = validators
 		
-			form: $("#form"),
-			
-			validators: [
-			
-				new ElementValidator({
-				
-					element: $("#text"),
-					
-					validators: [
-					
-						new RegularExpressionValidator({
-						
-							pattern: /[\d]+/,
-							
-							error: "Вы ввели плохой текст!"
-							
-						})
-						
-					],
-					
-					validator: "form_validation.json"
-					
-				})
-				
-			],
-			
-			callback: function () {
-				
-				console.log("submitting form ", this.getForm().attr("id"))
-				
-			}
-			
-		})
-		
-		$("#button").click(function () {
-		
-			try {
-			
-				validator.validate()
-				
-			} catch (exception) {
-			
-				console.log("%o", exception)
-			
-			}
-			
-			return false
-			
-		})
-	
 	})
-	
-})(jQuery)
+})(jQuery, window)
